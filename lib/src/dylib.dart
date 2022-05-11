@@ -49,7 +49,6 @@ LibSerialPort get dylib {
     return _dylib ??= LibSerialPort(
       resolveDylibPath(
         'serialport',
-        path: Directory.current.toString(),
         dartDefine: 'LIBSERIALPORT_PATH',
         environmentVariable: 'LIBSERIALPORT_PATH',
       ),
