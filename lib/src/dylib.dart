@@ -31,14 +31,28 @@ import 'package:path/path.dart' as p;
 
 LibSerialPort? _dylib;
 LibSerialPort get dylib {
-  return _dylib ??= LibSerialPort(
-    ffi.DynamicLibrary.open(p.join(Directory.current.toString(), 'serialport.dll')),
-  );
-  //   resolveDylibPath(
-  //     'serialport',
-  //     path: Directory.current.toString(),
-  //     // dartDefine: 'LIBSERIALPORT_PATH',
-  //     // environmentVariable: 'LIBSERIALPORT_PATH',
-  //   ),
-  // ));
+  if (Platform.isWindows) {
+    return _dylib ??= LibSerialPort(
+      ffi.DynamicLibrary.open(p.joinAll([
+        File(Platform.resolvedExecutable).parent.path,
+        "data",
+        "flutter_assets",
+        "packages",
+        "afi_device_client",
+        "third_party",
+        "libserialport",
+        "windows",
+        "libserialport.dll"
+      ])),
+    );
+  } else {
+    return _dylib ??= LibSerialPort(
+      resolveDylibPath(
+        'serialport',
+        path: Directory.current.toString(),
+        dartDefine: 'LIBSERIALPORT_PATH',
+        environmentVariable: 'LIBSERIALPORT_PATH',
+      ),
+    );
+  }
 }
