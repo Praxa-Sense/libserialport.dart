@@ -23,17 +23,22 @@
  */
 
 import 'dart:ffi' as ffi;
+import 'dart:io';
 
 import 'package:libserialport/src/bindings.dart';
 import 'package:dylib/dylib.dart';
+import 'package:path/path.dart' as p;
 
 LibSerialPort? _dylib;
 LibSerialPort get dylib {
-  return _dylib ??= LibSerialPort(ffi.DynamicLibrary.open(
-    resolveDylibPath(
-      'serialport',
-      dartDefine: 'LIBSERIALPORT_PATH',
-      environmentVariable: 'LIBSERIALPORT_PATH',
-    ),
-  ));
+  return _dylib ??= LibSerialPort(
+    ffi.DynamicLibrary.open(p.join(Directory.current.toString(), 'serialport.dll')),
+  );
+  //   resolveDylibPath(
+  //     'serialport',
+  //     path: Directory.current.toString(),
+  //     // dartDefine: 'LIBSERIALPORT_PATH',
+  //     // environmentVariable: 'LIBSERIALPORT_PATH',
+  //   ),
+  // ));
 }
