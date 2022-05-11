@@ -46,12 +46,12 @@ LibSerialPort get dylib {
       ])),
     );
   } else {
-    return _dylib ??= LibSerialPort(
+    return _dylib ??= LibSerialPort(ffi.DynamicLibrary.open(
       resolveDylibPath(
         'serialport',
         dartDefine: 'LIBSERIALPORT_PATH',
         environmentVariable: 'LIBSERIALPORT_PATH',
       ),
-    );
+    ));
   }
 }
